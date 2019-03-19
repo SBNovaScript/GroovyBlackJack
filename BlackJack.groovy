@@ -17,6 +17,7 @@ class BlackJack{
         def choice = "H"
         while (choice == "H") {
             choice = System.console().readLine 'Do you want to (H)it, (S)tay, or (Q)uit? '
+            println()
             switch(choice) {
                 case "H":
                     hit()
@@ -87,10 +88,10 @@ class BlackJack{
     }
 
     def printCards() {
-        println "Player cards:"
+        println "Player has score ${playerCards.calculateScore()} with cards:"
         playerCards.printCards()
 
-        println "Dealer cards:"
+        println "Dealer has score ${dealerCards.calculateScore()} with cards:"
         dealerCards.printCards()
     }
 
