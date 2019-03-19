@@ -41,35 +41,38 @@ class Deck {
         return totalScore
     }
 
-    private def calculateInitialScore() {
+    private calculateInitialScore() {
         int totalScore = 0
         cards.each{ i ->
             if (i instanceof Integer) {
                 totalScore += i
             } else {
-                def newValue = faceCardToValue i
-                totalScore += newValue
+                totalScore += faceCardToValue i
             }
         }
         return totalScore
     }
 
-    private def calculateAcesWithScore(totalScore) {
-        if ((totalScore - 1) + 11 <= 21) {
-            totalScore = (totalScore - 1) + 11
+    private calculateAcesWithScore(totalScore) {
+        if (aceCanBeLargeIn(totalScore)) {
+            totalScore = largerAce(totalScore)
         }
         return totalScore
     }
 
-    private int faceCardToValue(card) {
-        switch(card) {
-            case "A":
-                return 1
-                break
-            default:
-                return 10
-                break
-        }
+    private boolean aceCanBeLargeIn(totalScore) {
+        largerAce(totalScore) <= 21
     }
 
+    private int largerAce(totalScore) {
+        (totalScore - 1) + 11
+    }
+
+    private int faceCardToValue(card) {
+        if(card == "A") {
+            return 1
+        } else {
+            return 10
+        }
+    }
 }

@@ -52,23 +52,30 @@ class BlackJack{
             quit()
         }
         if (dealerCards.calculateScore() > 21) {
-            println "Dealer busts! You won!"
+            println "Dealer busts! You win!"
             quit()
         }
     }
 
     def checkForWinner() {
         if (playerWon()) {
-            println "Yay! You won!"
+            println "Yay! You win!"
+            quit()
+        } else if (dealerWon()){
+            println "Oops! You lose!"
             quit()
         } else {
-            println "Oops! You lost!"
+            println "It's a tie!"
             quit()
         }
     }
 
-    def boolean playerWon() {
+    boolean playerWon() {
         playerCards.calculateScore() > dealerCards.calculateScore()
+    }
+
+    boolean dealerWon() {
+        dealerCards.calculateScore() > playerCards.calculateScore()
     }
 
     def givePlayerCard() {
