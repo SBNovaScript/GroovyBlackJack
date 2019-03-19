@@ -22,19 +22,66 @@ public class BlackJack{
     }
 
     static def getPlayerInput() {
-        def choice = System.console().readLine 'Do you want to (H)it, (S)tay, or (Q)uit? '
-        switch(choice) {
-            case "H":
-                givePlayerCard()
-                printCards()
-                calculateScoreFor(playerCards)
-            break
+        def choice = "H"
+        while (choice == "H") {
+            choice = System.console().readLine 'Do you want to (H)it, (S)tay, or (Q)uit? '
+            switch(choice) {
+                case "H":
+                    Hit()
+                    break
+                case "S":
+                    Stay()
+                    break
+                case "Q":
+                    quit()
+                break
+            }
         }
-        
     }
 
-    static def calculateScoreFor(player) {
+    static def Hit() {
+        givePlayerCard()
+        printCards()
+        checkForBust()  
+    }
+
+    static def Stay() {
+        while (calculateScoreFor(dealerCards) < 17) {
+            giveDealerCard()
+        }
+        printCards()
+        checkForBust()
+        checkForWinner()
+    }
+
+    static def checkForBust() {
+        if (calculateScoreFor(playerCards) > 21) {
+            println "Oops! You Bust!"
+            quit()
+        }
+        if (calculateScoreFor(dealerCards) > 21) {
+            println "Dealer busts! You won!"
+            quit()
+        }
+    }
+
+    static def checkForWinner() {
+        if (playerWon()) {
+            println "Yay! You won!"
+            quit()
+        } else {
+            println "Oops! You lost!"
+            quit()
+        }
+    }
+
+    static def boolean playerWon() {
+        return calculateScoreFor(playerCards) > calculateScoreFor(dealerCards)
+    }
+
+    static def int calculateScoreFor(player) {
         def totalScore = 0
+        def aceExists = 0;
         player.each{ i ->
             if (i instanceof Integer) {
                 totalScore += i
@@ -42,22 +89,23 @@ public class BlackJack{
                 totalScore += faceCardToValue(i)
             }
         }
-        println totalScore
+
+        if (aceExists > 0) {
+            if ((totalScore - 1) + 11 <= 21) {
+                totalScore = (totalScore - 1) + 11
+            }
+        }
+
+        return totalScore
     }
 
     static def int faceCardToValue(card) {
         switch(card) {
-            case "J":
-                return 10
-                break
-            case "Q":
-                return 11
-                break
-            case "K":
-                return 12
-                break
             case "A":
                 return 1
+                break
+            default:
+                return 10
                 break
         }
     }
@@ -79,10 +127,15 @@ public class BlackJack{
         playerCards.each { i ->
             println "${i}"
         }
+
         println "Dealer cards:"
         dealerCards.each { i ->
             println "${i}"
         }
+    }
+
+    static def quit() {
+        System.exit(0)
     }
 }
 
