@@ -1,8 +1,7 @@
-
 public class BlackJack{
-    static def deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
-    static def playerCards = []
-    static def dealerCards = []
+    static def deck = new Deck(2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A")
+    static def playerCards = new Deck()
+    static def dealerCards = new Deck()
 
     static main(args) {
         shuffleCards()
@@ -12,7 +11,7 @@ public class BlackJack{
     }
 
     static def shuffleCards() {
-        Collections.shuffle(deck)
+        deck.shuffleCards()
     }
 
     static def startDrawingCards() {
@@ -46,7 +45,7 @@ public class BlackJack{
     }
 
     static def Stay() {
-        while (calculateScoreFor(dealerCards) < 17) {
+        while (dealerCards.calculateScore() < 17) {
             giveDealerCard()
         }
         printCards()
@@ -55,11 +54,11 @@ public class BlackJack{
     }
 
     static def checkForBust() {
-        if (calculateScoreFor(playerCards) > 21) {
+        if (playerCards.calculateScore() > 21) {
             println "Oops! You Bust!"
             quit()
         }
-        if (calculateScoreFor(dealerCards) > 21) {
+        if (dealerCards.calculateScore() > 21) {
             println "Dealer busts! You won!"
             quit()
         }
@@ -76,68 +75,26 @@ public class BlackJack{
     }
 
     static def boolean playerWon() {
-        return calculateScoreFor(playerCards) > calculateScoreFor(dealerCards)
-    }
-
-    static def int calculateScoreFor(player) {
-        def totalScore = 0
-        def aceExists = 0;
-        player.each{ i ->
-            if (i instanceof Integer) {
-                totalScore += i
-            } else {
-                totalScore += faceCardToValue(i)
-            }
-        }
-
-        if (aceExists > 0) {
-            if ((totalScore - 1) + 11 <= 21) {
-                totalScore = (totalScore - 1) + 11
-            }
-        }
-
-        return totalScore
-    }
-
-    static def int faceCardToValue(card) {
-        switch(card) {
-            case "A":
-                return 1
-                break
-            default:
-                return 10
-                break
-        }
+        return playerCards.calculateScore() > dealerCards.calculateScore()
     }
 
     static def givePlayerCard() {
-        def tempCard = deck[0]
-        deck.remove(0)
-        playerCards.add(tempCard)
+        playerCards.drawCards(deck.returnAndRemoveCard())
     }
 
     static def giveDealerCard() {
-        def tempCard = deck[0]
-        deck.remove(0)
-        dealerCards.add(tempCard)
+        dealerCards.drawCards(deck.returnAndRemoveCard())
     }
 
     static def printCards() {
         println "Player cards:"
-        playerCards.each { i ->
-            println "${i}"
-        }
+        playerCards.printCards()
 
         println "Dealer cards:"
-        dealerCards.each { i ->
-            println "${i}"
-        }
+        dealerCards.printCards()
     }
 
     static def quit() {
         System.exit(0)
     }
 }
-
-
-
