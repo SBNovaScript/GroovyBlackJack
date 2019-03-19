@@ -1,5 +1,6 @@
 class Deck {
-    def cards = []
+    private def cards = []
+    private def containsAce = false
 
     Deck(... args) {
         drawCards(args)
@@ -7,6 +8,9 @@ class Deck {
 
     def drawCards(... args) {
         args.each{ i ->
+            if (i == "A") {
+                containsAce = true
+            }
             cards.add(i)
         }
     }
@@ -17,7 +21,7 @@ class Deck {
 
     def returnAndRemoveCard() {
         def tempCard = cards[0]
-        cards.remove(0)
+        cards.remove 0 
         return tempCard
     }
 
@@ -27,27 +31,37 @@ class Deck {
         }
     }
 
-    def int calculateScore() {
-        def totalScore = 0
-        def aceExists = 0;
-        cards.each{ i ->
-            if (i instanceof Integer) {
-                totalScore += i
-            } else {
-                totalScore += faceCardToValue(i)
-            }
-        }
+    def calculateScore() {
+        int totalScore = calculateInitialScore()
 
-        if (aceExists > 0) {
-            if ((totalScore - 1) + 11 <= 21) {
-                totalScore = (totalScore - 1) + 11
-            }
+        if (containsAce) {
+            totalScore = calculateAcesWithScore(totalScore)
         }
 
         return totalScore
     }
 
-    static def int faceCardToValue(card) {
+    private def calculateInitialScore() {
+        int totalScore = 0
+        cards.each{ i ->
+            if (i instanceof Integer) {
+                totalScore += i
+            } else {
+                def newValue = faceCardToValue i
+                totalScore += newValue
+            }
+        }
+        return totalScore
+    }
+
+    private def calculateAcesWithScore(totalScore) {
+        if ((totalScore - 1) + 11 <= 21) {
+            totalScore = (totalScore - 1) + 11
+        }
+        return totalScore
+    }
+
+    private int faceCardToValue(card) {
         switch(card) {
             case "A":
                 return 1

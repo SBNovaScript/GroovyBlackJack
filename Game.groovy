@@ -1,4 +1,4 @@
-public class Game {
+class Game {
     static main(args) {
 
         BlackJack mainGame = new BlackJack()

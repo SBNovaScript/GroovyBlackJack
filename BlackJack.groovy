@@ -1,4 +1,4 @@
-public class BlackJack{
+class BlackJack{
     def deck = new Deck(2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A")
     def playerCards = new Deck()
     def dealerCards = new Deck()
@@ -19,10 +19,10 @@ public class BlackJack{
             choice = System.console().readLine 'Do you want to (H)it, (S)tay, or (Q)uit? '
             switch(choice) {
                 case "H":
-                    Hit()
+                    hit()
                     break
                 case "S":
-                    Stay()
+                    stay()
                     break
                 case "Q":
                     quit()
@@ -31,13 +31,13 @@ public class BlackJack{
         }
     }
 
-    def Hit() {
+    def hit() {
         givePlayerCard()
         printCards()
         checkForBust()  
     }
 
-    def Stay() {
+    def stay() {
         while (dealerCards.calculateScore() < 17) {
             giveDealerCard()
         }
@@ -68,7 +68,7 @@ public class BlackJack{
     }
 
     def boolean playerWon() {
-        return playerCards.calculateScore() > dealerCards.calculateScore()
+        playerCards.calculateScore() > dealerCards.calculateScore()
     }
 
     def givePlayerCard() {
@@ -88,6 +88,6 @@ public class BlackJack{
     }
 
     def quit() {
-        System.exit(0)
+        System.exit 0
     }
 }
