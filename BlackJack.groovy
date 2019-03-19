@@ -1,26 +1,19 @@
 public class BlackJack{
-    static def deck = new Deck(2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A")
-    static def playerCards = new Deck()
-    static def dealerCards = new Deck()
+    def deck = new Deck(2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A")
+    def playerCards = new Deck()
+    def dealerCards = new Deck()
 
-    static main(args) {
-        shuffleCards()
-        startDrawingCards()
-        printCards()
-        getPlayerInput()
-    }
-
-    static def shuffleCards() {
+    def shuffleCards() {
         deck.shuffleCards()
     }
 
-    static def startDrawingCards() {
+    def startDrawingCards() {
         giveDealerCard()
         givePlayerCard()
         givePlayerCard()
     }
 
-    static def getPlayerInput() {
+    def getPlayerInput() {
         def choice = "H"
         while (choice == "H") {
             choice = System.console().readLine 'Do you want to (H)it, (S)tay, or (Q)uit? '
@@ -38,13 +31,13 @@ public class BlackJack{
         }
     }
 
-    static def Hit() {
+    def Hit() {
         givePlayerCard()
         printCards()
         checkForBust()  
     }
 
-    static def Stay() {
+    def Stay() {
         while (dealerCards.calculateScore() < 17) {
             giveDealerCard()
         }
@@ -53,7 +46,7 @@ public class BlackJack{
         checkForWinner()
     }
 
-    static def checkForBust() {
+    def checkForBust() {
         if (playerCards.calculateScore() > 21) {
             println "Oops! You Bust!"
             quit()
@@ -64,7 +57,7 @@ public class BlackJack{
         }
     }
 
-    static def checkForWinner() {
+    def checkForWinner() {
         if (playerWon()) {
             println "Yay! You won!"
             quit()
@@ -74,19 +67,19 @@ public class BlackJack{
         }
     }
 
-    static def boolean playerWon() {
+    def boolean playerWon() {
         return playerCards.calculateScore() > dealerCards.calculateScore()
     }
 
-    static def givePlayerCard() {
+    def givePlayerCard() {
         playerCards.drawCards(deck.returnAndRemoveCard())
     }
 
-    static def giveDealerCard() {
+    def giveDealerCard() {
         dealerCards.drawCards(deck.returnAndRemoveCard())
     }
 
-    static def printCards() {
+    def printCards() {
         println "Player cards:"
         playerCards.printCards()
 
@@ -94,7 +87,7 @@ public class BlackJack{
         dealerCards.printCards()
     }
 
-    static def quit() {
+    def quit() {
         System.exit(0)
     }
 }
